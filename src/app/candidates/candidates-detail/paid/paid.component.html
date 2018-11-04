@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-xs-12">
+    <hr>
+    <h1>Paid</h1>
+  </div>
+
+  <div class="col-xs-12">
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+        <thead>
+          <tr>
+            <th>Index</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>SV Name</th>
+            <th>Hours</th>
+            <th>Amount</th>
+            <th>Deduct</th>
+            <th>Deduct Amount</th>
+            <th>Comment</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="cursor:pointer" *ngFor="let paidTransaction of paidTransactions; let i = index">
+            <td>{{ i + 1 }}</td> 
+            <td>{{ paidTransaction.startdate | utcDate | date: 'MM/dd/yyyy' }}</td>
+            <td>{{ paidTransaction.enddate | utcDate | date: 'MM/dd/yyyy' }}</td>
+            <td>{{ paidTransaction.subvendorid.svName }}</td>
+            <td>{{ paidTransaction.totalHours }}</td>
+            <td>{{ paidTransaction.subvendoramount }}</td>
+            <td>{{ paidTransaction.deductionstobepassedtosubvendor }}</td>
+            <td>{{ paidTransaction.subvendordeductions }}</td>
+            <td>{{ paidTransaction.subvendorcomments }}</td>
+            <td>{{ paidTransaction.subvendorpaidstatus }}</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <!--end of .table-responsive-->
+
+  </div>
+
+</div>

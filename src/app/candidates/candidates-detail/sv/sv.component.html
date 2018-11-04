@@ -1,0 +1,182 @@
+<div class="row">
+
+  <div class="col-xs-12">
+    <hr>
+    <h1>SV</h1>
+  </div>
+
+  <div class="col-xs-12">
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+        <thead>
+          <tr>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>SV Name</th>
+            <th>Hours</th>
+            <th>Amount</th>
+            <th>Deduct</th>
+            <th>Deduct Amount</th>
+            <th>SV COmment</th>
+            <th>Select to pay</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="cursor:pointer" *ngFor="let svDetail of svDetails" (click)="onEditItem(svDetail.transactionId)">
+            <td>{{svDetail?.startdate | utcDate | date: 'MM/dd/yyyy'}}</td>
+            <td>{{svDetail?.enddate | utcDate | date: 'MM/dd/yyyy'}}</td>
+            <td>{{svDetail?.subvendorid?.svName}}</td>
+            <td>{{svDetail?.totalHours}}</td>
+            <td>{{svDetail?.subvendoramount}}</td>
+            <td>{{ svDetail.deductionstobepassedtosubvendor }}</td>
+            <td>{{svDetail?.deductions}}</td>
+            <td>{{svDetail?.subvendorcomments}}</td>
+            <td align="center">
+              <input  [(ngModel)] = "svDetail.isChecked"
+                      style="cursor: pointer" type="checkbox" name="options" 
+                      (change)="onChecked($event, svDetail.transactionId)"
+              >
+            </td>
+            <!-- https://juristr.com/blog/2016/11/ng2-binding-radiobutton-lists/ -->
+          </tr>
+          <tr *ngIf="!svDetails || svDetails.length==0">
+            <td colspan="9" class="text-center">No transactions to show</td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <!--end of .table-responsive-->
+
+  </div>
+
+</div>
+
+<div class="row">
+  <div class="col-xs-3">
+    <h4>Total Hours: {{ totalHours }}</h4>
+  </div>
+  <div class="col-xs-3">
+    <h4>Total Amount: {{ totalAmount }}</h4>
+  </div>
+  <div class="col-xs-3 pull-right">
+    <button class="btn btn-success btn-block" (click)="onPay()">Pay Now</button>
+  </div>
+</div>
+
+
+
+<div class="row">
+
+  <hr>
+
+  <div class="col-xs-12">
+
+    <form [formGroup]="svForm" (ngSubmit)="onSubmit()">
+
+      <fieldset>
+
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="startDate">Start Date</label>
+            <input formControlName="startdate" class="form-control" placeholder="" type="date" useValueAsDate>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="telephone">End Date</label>
+            <input formControlName="enddate" class="form-control" type="date" useValueAsDate>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="totalHours">Total Hours</label>
+            <input formControlName="totalHours" class="form-control" placeholder="" type="text">
+          </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6">
+              <label class="control-label" for="sub_vendor_amount">Total Amount</label>
+              <input formControlName="subvendoramount" class="form-control" placeholder="" type="text">
+            </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="deduction">Deduction</label>
+            <input formControlName="subvendordeductions" class="form-control" placeholder="" type="text">
+          </div>
+        </div> 
+
+        <div class="form-group">
+            <div class="col-md-6">
+              <label class="control-label" for="subvendoramount">Calculated Amount</label>
+              <input formControlName="subvendoramount" class="form-control" placeholder="" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="comment">Comment</label>
+            <textarea formControlName="subvendorcomments" class="form-control" rows="4"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="subvendorpaidstatus">Status</label>
+            <div class="form-group radio">
+              <label><input type="radio" formControlName="subvendorpaidstatus" value="paid" >Paid</label>
+            </div>
+            <div class="form-group radio">
+              <label><input type="radio" formControlName="subvendorpaidstatus" value="unpaid" >Unpaid</label>
+            </div>
+            <div class="form-group radio">
+              <label><input type="radio" formControlName="subvendorpaidstatus" value="notbepaid" >Will not be paid</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="sub_vendorinvoicenumber">Invoice Number</label>
+            <input formControlName="sub_vendorinvoicenumber" class="form-control" placeholder="" type="text">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="svRate">SV Rate</label>
+            <input formControlName="subvendorrate" class="form-control" placeholder="" type="text">
+          </div>
+        </div>
+
+      </fieldset>
+
+      <hr>
+
+      <div class="row">
+
+        <div class="col-xs-2">
+          <button class="btn btn-success btn-block" type="submit">{{editMode ? 'Update' : 'Save'}}</button>
+        </div>
+        <div class="col-xs-2 ">
+          <button class="btn btn-danger btn-block" (click)="onReset()">Cancel</button>
+        </div>
+
+
+      </div>
+
+    </form>
+
+
+  </div>
+</div>
+
+<hr>

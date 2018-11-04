@@ -1,0 +1,193 @@
+<div class="row">
+
+  <div class="col-xs-12">
+    <hr> 
+    <h1>PV</h1>
+  </div>
+
+  <div class="col-xs-12">
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+        <thead>
+          <tr>
+            <!-- <th>Date</th> -->
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>PV Name</th>
+            <th>Hours</th>
+            <th>Exp Amnt</th>
+            <th>Actl Amnt</th>
+            <th>Deduct</th>
+            <th colspan="2" class="text-center">Deduct Process to SV</th>
+            <th>PV COmment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="cursor:pointer" 
+              *ngFor = "let pvDetail of pvDetails"
+              (click)="onEditItem(pvDetail.transactionId)"
+          > 
+            <!-- <td>*</td> -->
+            <td>{{ pvDetail?.startdate | utcDate  | date: 'MM/dd/yyyy' }}</td>
+            <td>{{ pvDetail?.enddate | utcDate  | date: 'MM/dd/yyyy' }}</td>
+            <td>{{ pvDetail?.primevendorid?.pvName }}</td>
+            <td>{{ pvDetail?.totalHours }}</td>
+            <td>{{ pvDetail?.primevendorExpectedAmount }}</td>
+            <td>{{ pvDetail?.primevendorActualPayment }}</td>
+            <td>{{ pvDetail?.deductions }}</td>
+            <td>*</td>
+            <td>*</td>
+            <td>{{ pvDetail?.primevendorcomments }}</td>
+          </tr>
+          <tr *ngIf="!pvDetails">
+              <td colspan="11" class="text-center">Lodding data. Please wait...</td>
+            </tr>
+          <tr *ngIf="!pvDetails || pvDetails.length==0">
+            <td colspan="11" class="text-center">No transactions to show</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+    </div>
+    <!--end of .table-responsive-->
+
+  </div>
+
+</div>
+
+
+
+<div class="row">
+  <!-- <p>{{ pvForm.value | json }}</p> -->
+  <hr>
+
+  <div class="col-xs-12">
+
+    <form [formGroup]="pvForm" (ngSubmit)="onSubmit()">
+
+      <fieldset>
+
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="startDate">Start Date</label>
+            <input formControlName="startdate" class="form-control" placeholder="" type="date" useValueAsDate>
+          </div>
+        </div>
+ 
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="telephone">End Date</label>
+            <input formControlName="enddate" class="form-control" type="date" useValueAsDate>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="receivedDate">Received Date</label>
+            <input formControlName="primevendorpaiddate" class="form-control" type="date" useValueAsDate>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="totalHours">Total Hours</label>
+            <input formControlName="totalHours" #TotalHours class="form-control" placeholder="" type="text">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="expectedAmount">Expected Amount</label>
+            <input readonly
+             formControlName="primevendorExpectedAmount" class="form-control" placeholder="" type="number">
+          </div>
+        </div> 
+        
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="actualPayment">Actual Payment</label>
+            <input formControlName="primevendorActualPayment" class="form-control" placeholder="" type="text">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="deductions">Deduction</label>
+            <input formControlName="deductions" class="form-control" placeholder="" type="text">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="deductionstobepassedtosubvendor">Deduction To Be Sub Vendor</label>
+            <select formControlName="deductionstobepassedtosubvendor" class="form-control">
+              <option *ngFor="let dtos of deductionToSv" [ngValue]="dtos.value">{{dtos.value}}</option>
+            </select>
+            <!-- <input formControlName="deductionstobepassedtosubvendor" class="form-control" placeholder="" type="text"> -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="comment">Comment</label>
+            <textarea formControlName="primevendorcomments" class="form-control" rows="4"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="status">Status</label>
+            <div class="form-group radio">
+              <label><input type="radio" value="paid" formControlName="primevendorpaidstatus">Paid</label>
+            </div>
+            <div class="form-group radio"> 
+              <label><input type="radio" value="unpaid" formControlName="primevendorpaidstatus">Unpaid</label>
+            </div>
+            <div class="form-group radio">
+              <label><input type="radio" value="notbepaid" formControlName="primevendorpaidstatus">Will not be paid</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <label class="control-label" for="invoiceNumber">Invoice Number</label>
+            <input formControlName="primevendorinvoicenumber" class="form-control" placeholder="" type="text">
+          </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-6">
+              <label class="control-label" for="pvRate">PV Rate</label>
+              <input formControlName="primevendorrate" #PrimeVendorRate class="form-control" placeholder="" type="text">
+            </div>
+          </div>
+
+
+      </fieldset>
+
+      <hr>
+
+      <div class="row">
+
+        <div class="col-xs-2">
+          <button class="btn btn-success btn-block" type="submit">{{editMode ? 'Update' : 'Save'}}</button>
+        </div>
+        <div class="col-xs-2 ">
+          <button class="btn btn-danger btn-block" (click)="onCancel()">Cancel</button>
+        </div>
+
+
+      </div>
+
+    </form>
+
+
+  </div>
+</div>
+
+<hr>

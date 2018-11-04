@@ -1,0 +1,151 @@
+<div class="row">
+
+  <div class="col-xs-12">
+    <hr>
+    <h1>SI EMP</h1>
+  </div>
+
+  <div class="col-xs-12">
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+
+        <thead>
+          <tr>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Total</th>
+            <th>Source's</th>
+            <th>Sales Emp</th>
+            <th>Recruiter</th>
+            <th>Manager 1</th>
+            <th>Manager 2</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Select</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let paidTransaction of paidTransactions; let i = index">
+            <td>{{ paidTransaction.startdate | utcDate | date: 'MM/dd/yyyy' }}</td>
+            <td>{{ paidTransaction.enddate | utcDate | date: 'MM/dd/yyyy' }}</td>
+            <td>{{ (paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) }}</td>
+            <td>{{ (paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) - ( 
+                + (((paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) * this.paidTransaction.candidate.commission.salesCommission) / 100)
+                + (((paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) * this.paidTransaction.candidate.commission.recruiterCommission) / 100)
+                + (((paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) * this.paidTransaction.candidate.commission.managerOneCommission) / 100)
+                + (((paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) * this.paidTransaction.candidate.commission.managerTwoCommission) / 100) 
+               ) }}</td>
+            <td>{{ ((paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) * this.paidTransaction.candidate.commission.salesCommission) / 100 }}</td>
+            <td>{{ ((paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) * this.paidTransaction.candidate.commission.recruiterCommission) / 100 }}</td>
+            <td>{{ ((paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) * this.paidTransaction.candidate.commission.managerOneCommission) / 100 }}</td>
+            <td>{{ ((paidTransaction.primevendorActualPayment - paidTransaction.subvendoramount) * this.paidTransaction.candidate.commission.managerTwoCommission) / 100 }}</td>
+            <td>*</td>
+            <td>*</td>
+            <td align="center">
+                <input  [(ngModel)] = "paidTransaction.isChecked"
+                        style="cursor: pointer" type="checkbox" name="options" 
+                        (change)="onChecked()"
+                >
+              </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+    <!--end of .table-responsive-->
+
+  </div>
+
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col-xs-6">
+    <a class="list-group-item clearfix">
+      <div class="pull-left">
+        <h4 class="list-group-item-heading">Name</h4>
+      </div>
+      <span class="pull-right">
+        <h4 class="list-group-item-heading">% Commission</h4>
+      </span>
+    </a>
+    <a class="list-group-item clearfix left">
+      <div class="pull-left">
+        <h5 class="list-group-item-heading">Sales Person</h5>
+      </div>
+      <span class="pull-right">
+        <h5 class="list-group-item-heading">{{ salesCommission }} %</h5>
+      </span>
+    </a>
+    <a class="list-group-item clearfix left">
+      <div class="pull-left">
+        <h5 class="list-group-item-heading">Recruiter</h5>
+      </div>
+      <span class="pull-right">
+        <h5 class="list-group-item-heading">{{ recruiterCommission }} %</h5>
+      </span>
+    </a>
+    <a class="list-group-item clearfix  left">
+      <div class="pull-left">
+        <h5 class="list-group-item-heading">Manager 1</h5>
+      </div>
+      <span class="pull-right">
+        <h5 class="list-group-item-heading">{{ managerOneCommission }} %</h5>
+      </span>
+    </a>
+    <a class="list-group-item clearfix left">
+      <div class="pull-left">
+        <h5 class="list-group-item-heading">Manager 2</h5>
+      </div>
+      <span class="pull-right">
+        <h5 class="list-group-item-heading">{{ managerTwoCommission }} %</h5>
+      </span>
+    </a>
+  </div>
+
+  <div class="col-xs-6">
+    <a class="list-group-item clearfix">
+      <div class="text-center">
+        <h4 class="list-group-item-heading">Amount to pay</h4>
+      </div>
+    </a>
+    <a class="list-group-item clearfix">
+      <div class="pull-left">
+        <h5 class="list-group-item-heading">Sales Person</h5>
+      </div>
+      <span class="pull-right">
+        <button class="btn btn-success" (click)="onPay()">Pay Now</button>
+      </span>
+    </a>
+    <a class="list-group-item clearfix">
+      <div class="pull-left">
+        <h5 class="list-group-item-heading">Recruiter</h5>
+      </div>
+      <span class="pull-right">
+        <button class="btn btn-success" (click)="onPay()">Pay Now</button>
+      </span>
+    </a>
+    <a class="list-group-item clearfix">
+      <div class="pull-left">
+        <h5 class="list-group-item-heading">Manager 1</h5>
+      </div>
+      <span class="pull-right">
+        <button class="btn btn-success" (click)="onPay()">Pay Now</button>
+      </span>
+    </a>
+    <a class="list-group-item clearfix">
+      <div class="pull-left">
+        <h5 class="list-group-item-heading">Manager 2</h5>
+      </div>
+      <span class="pull-right">
+        <button class="btn btn-success" (click)="onPay()">Pay Now</button>
+      </span>
+    </a>
+  </div>
+
+</div>
+
+<hr>
